@@ -1208,13 +1208,37 @@ def evaluate_arguments(args):
                  max_memory = args.java_max_memory,
                  exit_on_fail = exit_on_fail)
 
+
 def get_path_to_jnml_jar():
+    """
+    Find the path of the jNeuroML jar file.
 
+    :returns: path to jNeuroML jar
+    """
+
+    jarnames = [
+        "jNeuroML-{}-jar-with-dependencies.jar".format(JNEUROML_VERSION),
+        "jNeuroML-{}.jar".format(JNEUROML_VERSION)
+    ]
+
+    for jarname in jarnames:
+        # try standard java directory
+        fullpath = os.path.join("/usr/share/java", jarname)
+        if os.path.exists(fullpath):
+            return fullpath
+
+        # next look at CLASSPATH
+        if 'CLASSPATH' in os.environ:
+            classpathlist = os.environ.get('CLASSPATH').split(':')
+            for classpath in classpathlist:
+                if "jNeuroML" in classpath:
+                    if os.path.exists(classpath):
+                        return classpath
+
+    # Otherwise use bundled jar
     script_dir = os.path.dirname(os.path.realpath(__file__))
-
-    jar_path = os.path.join(script_dir, "lib", 
-                       "jNeuroML-%s-jar-with-dependencies.jar" % JNEUROML_VERSION)
-            
+    jar_path = os.path.join(
+        script_dir, "lib", "jNeuroML-%s-jar-with-dependencies.jar" % JNEUROML_VERSION)
     return jar_path
 
 def run_jneuroml(pre_args, 

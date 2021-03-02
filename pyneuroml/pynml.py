@@ -1339,11 +1339,7 @@ def evaluate_arguments(args):
 
 
 def get_path_to_jnml_jar():
-    script_dir = os.path.dirname(os.path.realpath(__file__))
-    jar_path = os.path.join(
-        script_dir, "lib",
-        "jNeuroML-%s-jar-with-dependencies.jar" % JNEUROML_VERSION
-    )
+    jar_path = ("/usr/share/java/jNeuroML-%s.jar" % JNEUROML_VERSION)
     return jar_path
 
 
